@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/jpeg"
 	"log"
 	"os"
+	"strings"
 )
 
 func readFile(name string) (image.Image, error) {
@@ -58,15 +60,20 @@ func writeFile(name string, img image.Image) error {
 }
 
 func main() {
-	img, err := readFile("testdata/rincewind.jpg")
+	args := os.Args[1:]
+	fileName := args[0]
+
+	img, err := readFile(fileName)
 	if err != nil {
 		log.Panic(err)
 	}
 
 	gray := greyscale(img)
 
-	err = writeFile("testdata/rincewind_gray.jpg", gray)
+	fileName = strings.Replace(fileName, ".jpg", "_gray.jpg", -1)
+	err = writeFile(fileName, gray)
 	if err != nil {
 		log.Panic(err)
 	}
+	fmt.Println(fileName)
 }
